@@ -1,36 +1,44 @@
-
-import express from 'express'
-import bodyParser from 'body-parser'
-import http from 'http'
-import socketIO from 'socket.io'
-
-const server = express()
-const port = 9000;
-
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({
-    extended: true
-}))
+const express = require("express");
+const http = require("http");
+//const socketIo = require("socket.io");
+var cors = require('cors');
 
 
-const app = server.listen(port, function (err, result) {
-    console.log('running in port http://localhost:' + port)
-})
+// use it before all route definitions
 
-const io = socketIO.listen(app);
-// รอการ connect จาก client
-io.on('connection', client => {
-    console.log('user connected')
-  
-    // เมื่อ Client ตัดการเชื่อมต่อ
-    client.on('disconnect', () => {
-        console.log('user disconnected')
-    })
+const port = process.env.PORT || 4001;
+//const index = require("./routes/index");
 
-    // ส่งข้อมูลไปยัง Client ทุกตัวที่เขื่อมต่อแบบ Realtime
-    client.on('sent-message', function (message) {
-        io.sockets.emit('new-message', message)
-    })
-})
+const app = express();
+app.use(cors({origin: 'http://localhost:3000'}));
 
-export default server
+const server = http.createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+      origin: '*',
+    }
+  });
+
+//const io = socketIo(server);
+
+let interval;
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => getApiAndEmit(socket), 1000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    clearInterval(interval);
+  });
+});
+
+const getApiAndEmit = socket => {
+  const response = new Date();
+  // Emitting a new message. Will be consumed by the client
+  socket.emit("FromAPI", response);
+};
+
+server.listen(port, () => console.log(`Listening on port ${port}`));
