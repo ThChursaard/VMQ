@@ -1,8 +1,7 @@
 const express = require("express");
 const http = require("http");
 //const socketIo = require("socket.io");
-var cors = require('cors');
-
+var cors = require("cors");
 
 // use it before all route definitions
 
@@ -10,14 +9,16 @@ const port = process.env.PORT || 4001;
 //const index = require("./routes/index");
 
 const app = express();
-app.use(cors({origin: 'http://localhost:3000'}));
+app.use(cors({ origin: "http://localhost:3000" }));
 
 const server = http.createServer(app);
-const io = require('socket.io')(server, {
-    cors: {
-      origin: '*',
-    }
-  });
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+app.set("io", io);
 
 //const io = socketIo(server);
 
@@ -28,17 +29,31 @@ io.on("connection", (socket) => {
   if (interval) {
     clearInterval(interval);
   }
-  interval = setInterval(() => getApiAndEmit(socket), 1000);
+  //interval = setInterval(() => getApiAndEmit(socket), 1000);
   socket.on("disconnect", () => {
     console.log("Client disconnected");
     clearInterval(interval);
   });
 });
 
-const getApiAndEmit = socket => {
+const getApiAndEmit = (socket) => {
   const response = new Date();
   // Emitting a new message. Will be consumed by the client
   socket.emit("FromAPI", response);
 };
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
+
+app.get("/", (req, res) => {
+  res.send({ response: "re" }).status(200);
+  var socket = req.app.get("io");
+  getApiAndEmit(socket);
+});
+
+app.get("/update", function (req, res) {
+  const query = req.query; // query = {sex:"female"}
+
+  const params = req.params; //params = {id:"000000"}
+  console.log(query);
+  res.send({ response: "re" }).status(200);
+});
