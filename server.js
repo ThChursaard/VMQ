@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 //const socketIo = require("socket.io");
 var cors = require("cors");
-
+let scoreList = [];
 // use it before all route definitions
 
 const port = process.env.PORT || 4001;
@@ -42,6 +42,11 @@ const getApiAndEmit = (socket) => {
   socket.emit("FromAPI", response);
 };
 
+const getAllScore = (socket) => {
+  const response = scoreList;
+  socket.emit("AllScore", response);
+};
+
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get("/", (req, res) => {
@@ -50,10 +55,20 @@ app.get("/", (req, res) => {
   getApiAndEmit(socket);
 });
 
+const updateScore = (scoreList, username, newScore) => [
+  ...scoreList,
+  { username: newScore },
+];
+
 app.get("/update", function (req, res) {
   const query = req.query; // query = {sex:"female"}
 
   const params = req.params; //params = {id:"000000"}
   console.log(query);
+  const { score, username } = query;
+  scoreList = updateScore(scoreList, username, score);
+  console.log(scoreList);
+  var socket = req.app.get("io");
+  getAllScore(socket);
   res.send({ response: "re" }).status(200);
 });
