@@ -55,10 +55,12 @@ app.get("/", (req, res) => {
   getApiAndEmit(socket);
 });
 
-const updateScore = (scoreList, username, newScore) => [
-  ...scoreList,
-  { username: newScore },
-];
+const updateScore = (scoreList, username, newScore) => {
+  return [
+    ...scoreList.filter((c) => c.username != username),
+    { username: username, score: newScore },
+  ];
+};
 
 app.get("/update", function (req, res) {
   const query = req.query; // query = {sex:"female"}
