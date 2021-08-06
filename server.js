@@ -47,12 +47,23 @@ const getAllScore = (socket) => {
   socket.emit("AllScore", response);
 };
 
+const pushStart = (socket) => {
+  const response = true;
+  socket.emit("Start", response);
+};
+
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get("/", (req, res) => {
   res.send({ response: "re" }).status(200);
   var socket = req.app.get("io");
   getApiAndEmit(socket);
+});
+
+app.get("/start", (req, res) => {
+  res.send({ response: "start" }).status(200);
+  var socket = req.app.get("io");
+  pushStart(socket);
 });
 
 const updateScore = (scoreList, username, newScore) => {
