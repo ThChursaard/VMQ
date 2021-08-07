@@ -53,6 +53,11 @@ const pushStart = (socket) => {
   socket.emit("Start", response);
 };
 
+const pushSongList = (socket) => {
+  const response = songList;
+  socket.emit("songList", response);
+};
+
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get("/", (req, res) => {
@@ -65,6 +70,7 @@ app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
   pushStart(socket);
+  pushSongList(socket);
 });
 
 const updateScore = (scoreList, username, newScore) => {
