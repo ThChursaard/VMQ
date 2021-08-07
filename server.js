@@ -98,6 +98,6 @@ app.get("/addsong", function (req, res) {
   console.log(query);
   const { title, url } = query;
   songList = updateSong(songList, title, url);
-  console.log(scoreList);
+  console.log(songList);
   res.send({ response: "re" }).status(200);
 });
