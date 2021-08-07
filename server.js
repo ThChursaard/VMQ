@@ -55,7 +55,7 @@ const pushStart = (socket) => {
 
 const pushSongList = (socket) => {
   const response = songList;
-  socket.emit("songList", response);
+  socket.emit("SongList", response);
 };
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
