@@ -82,7 +82,7 @@ app.get("/update", function (req, res) {
   const query = req.query; // query = {sex:"female"}
 
   const params = req.params; //params = {id:"000000"}
-  console.log(query);
+
   const { score, username } = query;
   scoreList = updateScore(scoreList, username, score);
   console.log(scoreList);
@@ -95,7 +95,6 @@ app.get("/addsong", function (req, res) {
   const query = req.query; // query = {sex:"female"}
 
   const params = req.params; //params = {id:"000000"}
-  console.log(query);
   const { title, url } = query;
   songList = updateSong(songList, title, url);
   console.log(songList);
