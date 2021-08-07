@@ -3,6 +3,7 @@ const http = require("http");
 //const socketIo = require("socket.io");
 var cors = require("cors");
 let scoreList = [];
+let songList = [];
 // use it before all route definitions
 
 const port = process.env.PORT || 4001;
@@ -73,6 +74,10 @@ const updateScore = (scoreList, username, newScore) => {
   ];
 };
 
+const updateSong = (songList, title, url) => {
+  return [...songList, { title: title, url: url }];
+};
+
 app.get("/update", function (req, res) {
   const query = req.query; // query = {sex:"female"}
 
@@ -83,5 +88,16 @@ app.get("/update", function (req, res) {
   console.log(scoreList);
   var socket = req.app.get("io");
   getAllScore(socket);
+  res.send({ response: "re" }).status(200);
+});
+
+app.get("/addsong", function (req, res) {
+  const query = req.query; // query = {sex:"female"}
+
+  const params = req.params; //params = {id:"000000"}
+  console.log(query);
+  const { title, url } = query;
+  songList = updateSong(songList, title, url);
+  console.log(scoreList);
   res.send({ response: "re" }).status(200);
 });
