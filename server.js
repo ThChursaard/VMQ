@@ -89,6 +89,7 @@ function intervalFunc(socket) {
   if (parseInt(timeInterval / 15) % 3 == 2) solutionInterval = true;
   else solutionInterval = false;
   urlInterval = songList[indexInterval].url;
+  if (timeInterval % 45 == 29) urlInterval = "";
   pushIndexInterval(socket, indexInterval);
   pushSolutionInterval(socket, solutionInterval);
   pushUrlInterval(socket, urlInterval);
