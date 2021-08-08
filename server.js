@@ -24,7 +24,9 @@ app.set("io", io);
 //const io = socketIo(server);
 
 let interval;
-
+let timeInterval = 0;
+let indexInterval = 0;
+let solutionInterval = false;
 io.on("connection", (socket) => {
   console.log("New client connected");
   if (interval) {
@@ -66,11 +68,35 @@ app.get("/", (req, res) => {
   getApiAndEmit(socket);
 });
 
+const pushIndexInterval = (socket, index) => {
+  const response = index;
+  socket.emit("IndexInterval", response);
+};
+
+const pushSolutionInterval = (socket, solution) => {
+  const response = solution;
+  socket.emit("SongList", response);
+};
+
+function intervalFunc(socket) {
+  timeInterval = timeInterval + 1;
+  indexInterval = parseInt(timeInterval / 45);
+  if (parseInt(timeInterval / 15) % 3 == 2) solutionInterval = true;
+  else solutionInterval = false;
+  pushIndexInterval(socket, indexInterval);
+  pushSolutionInterval(socket, solutionInterval);
+  // console.log(timeInterval);
+  // console.log(indexInterval);
+  // console.log(solutionInterval);
+}
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
   pushStart(socket);
   pushSongList(socket);
+  setInterval(function () {
+    intervalFunc(socket);
+  }, 1500);
 });
 
 const updateScore = (scoreList, username, newScore) => {
