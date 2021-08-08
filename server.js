@@ -27,6 +27,7 @@ let interval;
 let timeInterval = 0;
 let indexInterval = 0;
 let solutionInterval = false;
+let urlInterval = "PWbi8J1_X5Q";
 io.on("connection", (socket) => {
   console.log("New client connected");
   if (interval) {
@@ -78,13 +79,19 @@ const pushSolutionInterval = (socket, solution) => {
   socket.emit("SongList", response);
 };
 
+const pushUrlInterval = (socket, url) => {
+  const response = url;
+  socket.emit("urlInterval", response);
+};
 function intervalFunc(socket) {
   timeInterval = timeInterval + 1;
   indexInterval = parseInt(timeInterval / 45);
   if (parseInt(timeInterval / 15) % 3 == 2) solutionInterval = true;
   else solutionInterval = false;
+  urlInterval = songList[indexInterval].url;
   pushIndexInterval(socket, indexInterval);
   pushSolutionInterval(socket, solutionInterval);
+  pushUrlInterval(socket, urlInterval);
   // console.log(timeInterval);
   // console.log(indexInterval);
   // console.log(solutionInterval);
@@ -94,6 +101,7 @@ app.get("/start", (req, res) => {
   var socket = req.app.get("io");
   pushStart(socket);
   pushSongList(socket);
+  timeInterval = 0;
   setInterval(function () {
     intervalFunc(socket);
   }, 1500);
