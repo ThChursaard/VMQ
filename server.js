@@ -76,7 +76,7 @@ const pushIndexInterval = (socket, index) => {
 
 const pushSolutionInterval = (socket, solution) => {
   const response = solution;
-  socket.emit("SongList", response);
+  socket.emit("SolutionInterval", response);
 };
 
 const pushUrlInterval = (socket, url) => {
