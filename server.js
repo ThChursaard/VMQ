@@ -117,6 +117,7 @@ function intervalFunc(socket) {
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
+  songList = getRandomNFromArray(songList, 25);
   pushStart(socket);
   pushSongList(socket);
   timeInterval = 0;
@@ -158,3 +159,25 @@ app.get("/addsong", function (req, res) {
   console.log(songList);
   res.send({ response: "re" }).status(200);
 });
+
+function shuffle(array) {
+  var currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+}
+
+const getRandomNFromArray = (array, n) => shuffle(array).slice(0, n);
