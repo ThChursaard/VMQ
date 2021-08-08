@@ -122,7 +122,7 @@ app.get("/start", (req, res) => {
   timeInterval = 0;
   setInterval(function () {
     intervalFunc(socket);
-  }, 1500);
+  }, 1000);
 });
 
 const updateScore = (scoreList, username, newScore) => {
