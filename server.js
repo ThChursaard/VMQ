@@ -117,7 +117,7 @@ function intervalFunc(socket) {
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
-  songList = getRandomNFromArray(songList, 25);
+  songList = getRandomNFromArray(songList, 40);
   pushStart(socket);
   pushSongList(socket);
   timeInterval = 0;
