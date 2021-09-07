@@ -9,6 +9,14 @@ let songList = [];
 const uniqueArray = (a) =>
   [...new Set(a.map((o) => JSON.stringify(o)))].map((s) => JSON.parse(s));
 
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+};
+
+const getRandomTime = () => {
+  return getRandomInt(20) + 10;
+};
+
 const port = process.env.PORT || 4001;
 //const index = require("./routes/index");
 
@@ -25,7 +33,7 @@ const io = require("socket.io")(server, {
 app.set("io", io);
 
 //const io = socketIo(server);
-
+let randomTimeInterval = 30;
 let interval;
 let timeInterval = 0;
 let indexInterval = 0;
@@ -98,16 +106,23 @@ const pushTimeInterval = (socket, timeInterval) => {
   socket.emit("TimeInterval", response);
 };
 
+const pushRandomTimeInterval = (socket, randomTime) => {
+  const response = randomTime;
+  socket.emit("RandomTime", response);
+};
+
 function intervalFunc(socket) {
   timeInterval = timeInterval + 1;
   indexInterval = parseInt(timeInterval / 45);
-  if (parseInt(timeInterval / 15) % 3 == 2) solutionInterval = true;
-  else solutionInterval = false;
+  if (parseInt(timeInterval / 15) % 3 == 2) {
+    solutionInterval = true;
+    randomTimeInterval = getRandomTime();
+  } else solutionInterval = false;
   urlInterval = songList[indexInterval].url;
   if (timeInterval % 45 == 29) urlInterval = "";
 
   trueAnswerInterval = songList[indexInterval].title;
-
+  pushRandomTimeInterval(socket, randomTimeInterval);
   pushIndexInterval(socket, indexInterval);
   pushSolutionInterval(socket, solutionInterval);
   pushUrlInterval(socket, urlInterval);
