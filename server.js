@@ -17,6 +17,11 @@ const getRandomTime = () => {
   return getRandomInt(20) + 10;
 };
 
+const getArrayRange = () => {
+  const c = new Array(50);
+  return c;
+};
+
 const port = process.env.PORT || 4001;
 //const index = require("./routes/index");
 
@@ -34,6 +39,8 @@ app.set("io", io);
 
 //const io = socketIo(server);
 let randomTimeInterval = 30;
+let randomTimeIntervalArray = getArrayRange.map((c) => getRandomTime());
+
 let interval;
 let timeInterval = 0;
 let indexInterval = 0;
@@ -116,9 +123,9 @@ function intervalFunc(socket) {
   indexInterval = parseInt(timeInterval / 45);
   if (parseInt(timeInterval / 15) % 3 == 2) {
     solutionInterval = true;
-    randomTimeInterval = getRandomTime();
   } else solutionInterval = false;
   urlInterval = songList[indexInterval].url;
+  randomTimeInterval = randomTimeIntervalArray[indexInterval];
   if (timeInterval % 45 == 29) urlInterval = "";
 
   trueAnswerInterval = songList[indexInterval].title;
