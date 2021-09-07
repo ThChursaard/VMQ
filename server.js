@@ -39,7 +39,7 @@ app.set("io", io);
 
 //const io = socketIo(server);
 let randomTimeInterval = 30;
-let randomTimeIntervalArray = getArrayRange.map((c) => getRandomTime());
+let randomTimeIntervalArray = getArrayRange().map((c) => getRandomTime());
 
 let interval;
 let timeInterval = 0;
