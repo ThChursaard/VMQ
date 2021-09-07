@@ -19,7 +19,7 @@ const getRandomTime = () => {
 
 const getArrayRange = () => {
   const c = new Array(50);
-  return c;
+  return c.fill(0);
 };
 
 const port = process.env.PORT || 4001;
@@ -39,8 +39,10 @@ app.set("io", io);
 
 //const io = socketIo(server);
 let randomTimeInterval = 30;
-let randomTimeIntervalArray = getArrayRange().map((c) => getRandomTime());
-
+let randomTimeIntervalArray = getArrayRange().map((c) => {
+  return getRandomTime();
+});
+console.log(randomTimeIntervalArray);
 let interval;
 let timeInterval = 0;
 let indexInterval = 0;
