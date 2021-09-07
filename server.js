@@ -6,6 +6,9 @@ let scoreList = [];
 let songList = [];
 // use it before all route definitions
 
+const uniqueArray = (a) =>
+  [...new Set(a.map((o) => JSON.stringify(o)))].map((s) => JSON.parse(s));
+
 const port = process.env.PORT || 4001;
 //const index = require("./routes/index");
 
@@ -117,7 +120,7 @@ function intervalFunc(socket) {
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
-  songList = getRandomNFromArray(songList, 40);
+  songList = getRandomNFromArray(uniqueArray(songList), 40);
   pushStart(socket);
   pushSongList(socket);
   timeInterval = 0;
