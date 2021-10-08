@@ -120,13 +120,14 @@ function intervalFunc(socket) {
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
-  songList = getRandomNFromArray(uniqueArray(songList), 40);
+  /*songList = getRandomNFromArray(uniqueArray(songList), 40); 
   pushStart(socket);
   pushSongList(socket);
   timeInterval = 0;
   setInterval(function () {
     intervalFunc(socket);
-  }, 1000);
+  }, 1000);*/
+  pushStart(socket);
 });
 
 const updateScore = (scoreList, username, newScore) => {
