@@ -137,8 +137,8 @@ const updateScore = (scoreList, username, newScore) => {
   ];
 };
 
-const updateSong = (songList, title, url) => {
-  return [...songList, { title: title, url: url }];
+const updateQuestion = (questionList, question, answer) => {
+  return [...questionList, { question: question, answer: answer }];
 };
 
 app.get("/update", function (req, res) {
@@ -154,13 +154,13 @@ app.get("/update", function (req, res) {
   res.send({ response: "re" }).status(200);
 });
 
-app.get("/addsong", function (req, res) {
+app.get("/addquestion", function (req, res) {
   const query = req.query; // query = {sex:"female"}
 
   const params = req.params; //params = {id:"000000"}
-  const { title, url } = query;
-  songList = updateSong(songList, title, url);
-  console.log(songList);
+  const { question, answer } = query;
+  questionList = updateQuestion(questionList, question, answer);
+  console.log(questionList);
   res.send({ response: "re" }).status(200);
 });
 
