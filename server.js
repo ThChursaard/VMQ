@@ -3,7 +3,7 @@ const http = require("http");
 //const socketIo = require("socket.io");
 var cors = require("cors");
 let scoreList = [];
-let songList = [];
+let questionList = [];
 // use it before all route definitions
 
 const uniqueArray = (a) =>
