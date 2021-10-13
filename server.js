@@ -60,9 +60,9 @@ const pushStart = (socket) => {
   socket.emit("Start", response);
 };
 
-const pushSongList = (socket) => {
-  const response = songList;
-  socket.emit("SongList", response);
+const pushQuestionList = (socket) => {
+  const response = questionList;
+  socket.emit("QuestionList", response);
 };
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
@@ -83,9 +83,9 @@ const pushSolutionInterval = (socket, solution) => {
   socket.emit("SolutionInterval", response);
 };
 
-const pushUrlInterval = (socket, url) => {
-  const response = url;
-  socket.emit("urlInterval", response);
+const pushQuestionInterval = (socket, question) => {
+  const response = question;
+  socket.emit("questionInterval", response);
 };
 
 const pushTrueAnswerInterval = (socket, trueAnswer) => {
@@ -103,30 +103,32 @@ function intervalFunc(socket) {
   indexInterval = parseInt(timeInterval / 45);
   if (parseInt(timeInterval / 15) % 3 == 2) solutionInterval = true;
   else solutionInterval = false;
-  urlInterval = songList[indexInterval].url;
-  if (timeInterval % 45 == 29) urlInterval = "";
+  questionInterval = questionList[indexInterval].question;
+  if (timeInterval % 45 == 29) questionInterval = "";
 
-  trueAnswerInterval = songList[indexInterval].title;
+  trueAnswerInterval = questionList[indexInterval].answer;
 
   pushIndexInterval(socket, indexInterval);
   pushSolutionInterval(socket, solutionInterval);
-  pushUrlInterval(socket, urlInterval);
+  pushQuestionInterval(socket, questionInterval);
   pushTrueAnswerInterval(socket, trueAnswerInterval);
   pushTimeInterval(socket, timeInterval);
-  // console.log(timeInterval);
-  // console.log(indexInterval);
-  // console.log(solutionInterval);
+  console.log(timeInterval);
+  console.log(indexInterval);
+  console.log(solutionInterval);
+  console.log(questionInterval);
+  console.log(trueAnswerInterval);
 }
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
-  /*songList = getRandomNFromArray(uniqueArray(songList), 40); 
+  questionList = getRandomNFromArray(uniqueArray(questionList), 40); 
   pushStart(socket);
-  pushSongList(socket);
+  pushQuestionList(socket);
   timeInterval = 0;
   setInterval(function () {
     intervalFunc(socket);
-  }, 1000);*/
+  }, 1000);
   pushStart(socket);
 });
 
