@@ -98,15 +98,22 @@ const pushTimeInterval = (socket, timeInterval) => {
   socket.emit("TimeInterval", response);
 };
 
+const pushEnd = (socket, end) => {
+  const response = end;
+  socket.emit("end",response);
+}
+
 function intervalFunc(socket) {
   timeInterval = timeInterval + 1;
   indexInterval = parseInt(timeInterval / 45);
+  if (indexInterval>questionList.length) pushEnd (socket, true);
   if (parseInt(timeInterval / 15) % 3 == 2) solutionInterval = true;
   else solutionInterval = false;
   questionInterval = questionList[indexInterval].question;
   if (timeInterval % 45 == 29) questionInterval = "";
 
   trueAnswerInterval = questionList[indexInterval].answer;
+  
 
   pushIndexInterval(socket, indexInterval);
   pushSolutionInterval(socket, solutionInterval);
