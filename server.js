@@ -129,7 +129,7 @@ function intervalFunc(socket) {
 app.get("/start", (req, res) => {
   res.send({ response: "start" }).status(200);
   var socket = req.app.get("io");
-  questionList = getRandomNFromArray(uniqueArray(questionList), 40);
+  questionList = getRandomNFromArray(uniqueArray(questionList), 20);
   pushStart(socket);
   pushQuestionList(socket);
   timeInterval = 0;
